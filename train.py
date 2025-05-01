@@ -54,7 +54,7 @@ def train():
         )
     wandb.login(key=WANDB_API_KEY)
     wandb.init(
-        project="ppo-lunar-lander",
+        project="lunar-lander-ppo-pt",
         config={
             "train_params": asdict(train_params),
             "dataset_params": asdict(dataset_params),
