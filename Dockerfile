@@ -10,8 +10,9 @@ RUN /venv/bin/python3 -m pip install \
     torch torchvision \
     numpy \
     gymnasium \
-    mujoco \
-    imageio \
+    pygame \
+    swig \
+    box2d \
     wandb
 
 ENV PATH="/venv/bin:$PATH"
