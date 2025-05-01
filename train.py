@@ -92,8 +92,6 @@ def train():
         dataset.clear()
         # Collect episodes
         rewards_history = []
-        min_reward = float("inf")
-        max_reward = float("-inf")
         for episode in range(train_params.episodes_per_loop):
             episode_buffer = EpisodeBuffer(
                 params=EpisodeBufferParams(
@@ -128,8 +126,6 @@ def train():
                 f"Loop: {loop}, Episode: {episode}, Steps: {step}, Reward: {total_reward}"
             )
             rewards_history.append(total_reward)
-            min_reward = min(min_reward, total_reward)
-            max_reward = max(max_reward, total_reward)
 
         # Create dataloader
         dataloader = dataset.create_dataloader()
@@ -183,7 +179,9 @@ def train():
             {
                 "policy_loss": sum(policy_loss_history) / len(policy_loss_history),
                 "value_loss": sum(value_loss_history) / len(value_loss_history),
-                "total_reward": total_reward,
+                "average_reward": sum(rewards_history) / len(rewards_history),
+                "min_reward": min(rewards_history),
+                "max_reward": max(rewards_history),
             }
         )
 
@@ -194,8 +192,6 @@ def train():
             {
                 "loop": loop,
                 "rewards_history": rewards_history,
-                "min_reward": min_reward,
-                "max_reward": max_reward,
                 "policy_loss_history": policy_loss_history,
                 "value_loss_history": value_loss_history,
                 "policy_net": policy_net.state_dict(),
