@@ -182,6 +182,9 @@ def train():
             value_loss_avg_history.append(
                 sum(value_loss_history) / len(value_loss_history)
             )
+            print(
+                f"Loop: {loop}, Epoch: {epoch}, Policy Loss: {policy_loss_avg_history[-1]}, Value Loss: {value_loss_avg_history[-1]}"
+            )
 
         # Log to wandb
         wandb.log(
