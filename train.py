@@ -131,10 +131,12 @@ def train():
         dataloader = dataset.create_dataloader()
 
         # Train
-        policy_loss_history = []
-        value_loss_history = []
+        policy_loss_avg_history = []
+        value_loss_avg_history = []
 
         for epoch in range(train_params.epochs_per_loop):
+            policy_loss_history = []
+            value_loss_history = []
             for (
                 states,
                 actions,
@@ -174,11 +176,19 @@ def train():
                 value_net_optimizer.step()
                 value_loss_history.append(value_loss.item())
 
+            policy_loss_avg_history.append(
+                sum(policy_loss_history) / len(policy_loss_history)
+            )
+            value_loss_avg_history.append(
+                sum(value_loss_history) / len(value_loss_history)
+            )
+
         # Log to wandb
         wandb.log(
             {
-                "policy_loss": sum(policy_loss_history) / len(policy_loss_history),
-                "value_loss": sum(value_loss_history) / len(value_loss_history),
+                "policy_loss": sum(policy_loss_avg_history)
+                / len(policy_loss_avg_history),
+                "value_loss": sum(value_loss_avg_history) / len(value_loss_avg_history),
                 "average_reward": sum(rewards_history) / len(rewards_history),
                 "min_reward": min(rewards_history),
                 "max_reward": max(rewards_history),
@@ -192,8 +202,8 @@ def train():
             {
                 "loop": loop,
                 "rewards_history": rewards_history,
-                "policy_loss_history": policy_loss_history,
-                "value_loss_history": value_loss_history,
+                "policy_loss_history": policy_loss_avg_history,
+                "value_loss_history": value_loss_avg_history,
                 "policy_net": policy_net.state_dict(),
                 "value_net": value_net.state_dict(),
                 "policy_net_optimizer": policy_net_optimizer.state_dict(),
