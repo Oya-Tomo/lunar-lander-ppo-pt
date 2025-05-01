@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y python3 python3-pip python3-venv
 RUN python3 -m venv /venv
 
 RUN /venv/bin/python3 -m pip install \
-    torch torchvision \
+    torch torchvision torchrl \
     numpy \
     gymnasium \
     pygame \
