@@ -65,6 +65,7 @@ def train():
     env = LunarLanderV3(gui=False)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Using device: {device}")
 
     policy_net = PolicyNet(env.action_dim, env.state_dim).to(device)
     value_net = ValueNet(env.state_dim).to(device)
