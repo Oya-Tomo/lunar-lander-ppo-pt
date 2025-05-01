@@ -180,6 +180,25 @@ def train():
             }
         )
 
+        if not os.path.exists(f"checkpoints"):
+            os.makedirs(f"checkpoints", exist_ok=True)
+
+        torch.save(
+            {
+                "loop": loop,
+                "rewards_history": rewards_history,
+                "min_reward": min_reward,
+                "max_reward": max_reward,
+                "policy_loss_history": policy_loss_history,
+                "value_loss_history": value_loss_history,
+                "policy_net": policy_net.state_dict(),
+                "value_net": value_net.state_dict(),
+                "policy_net_optimizer": policy_net_optimizer.state_dict(),
+                "value_net_optimizer": value_net_optimizer.state_dict(),
+            },
+            f"checkpoints/checkpoint{loop}.pth",
+        )
+
 
 if __name__ == "__main__":
     train()
