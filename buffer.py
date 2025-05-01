@@ -135,7 +135,7 @@ class EpisodeDataset(Dataset):
         )
         self.value_targets.extend(
             [
-                torch.tensor(value_target, dtype=torch.float32)
+                torch.tensor([value_target], dtype=torch.float32)
                 for value_target in episode_buffer.value_targets
             ]
         )
