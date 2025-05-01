@@ -1,5 +1,5 @@
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 import torch
 import torch.nn.functional as F
@@ -36,7 +36,7 @@ def train():
         clip_epsilon=0.2,
     )
     dataset_params = EpisodeDatasetParams(
-        batch_size=64,
+        batch_size=256,
         shuffle=True,
         num_workers=4,
         pin_memory=True,
@@ -53,7 +53,14 @@ def train():
             "Please set it to your Weights & Biases API key."
         )
     wandb.login(key=WANDB_API_KEY)
-    wandb.init(project="ppo-lunar-lander", config={})
+    wandb.init(
+        project="ppo-lunar-lander",
+        config={
+            "train_params": asdict(train_params),
+            "dataset_params": asdict(dataset_params),
+            "episode_buffer_params": asdict(episode_buffer_params),
+        },
+    )
 
     env = LunarLanderV3(gui=False)
 
